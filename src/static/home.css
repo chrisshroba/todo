@@ -1,0 +1,101 @@
+@import 'https://fonts.googleapis.com/css?family=Damion:300,400,500';
+
+.damion {
+    font-family: "Damion", "Helvetica", "Arial", sans-serif;
+    font-size: 40px;
+    color: #f00050;
+}
+
+ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.task {
+    /*border-bottom: 1px solid #86989B;*/
+    background-color: #f5f7f9;
+    padding-top: 3px;
+    padding-bottom: 3px;
+
+    padding-left: 10px;
+    padding-right: 4px;
+}
+
+.done-task {
+    background-color: #c3e7c3;
+}
+
+.task-container {
+    display: table-row;
+}
+
+.task-text {
+    /*flex-grow: 1;*/
+    display: table-cell;
+    width: 100%;
+}
+
+.action-icons {
+    /*float: right;*/
+    display: table-cell;
+    /*width: 100%;*/
+    text-align: right;
+    white-space:nowrap;
+    /*width: 70px;*/
+    /*vertical-align: middle;*/
+}
+
+.heading-task {
+    background-color: #f9f4e6;
+    font-weight: 600;
+}
+
+.handle {
+    cursor: move;
+}
+
+.handle {
+    font-size: 80%;
+}
+
+.draggable_hover {
+    /*background-color: #e9f0dc;*/
+    /*font-weight: 600;*/
+    color: #777777;
+
+}
+
+
+.action-icon {
+    cursor: pointer;
+
+}
+
+.edit-icon {
+    color: #b7b185;
+}
+
+.edit-icon:hover {
+    color: #e7b357;
+}
+
+.done-icon {
+    color: #7fb794;
+}
+
+.done-icon:hover {
+    color: #5de366;
+}
+
+.trash-icon {
+    color: #b76167;
+}
+
+.trash-icon:hover {
+    color: #fc2b2e;
+}
+
+.container {
+    margin-top: 15px;
+    max-width: 800px;
+}

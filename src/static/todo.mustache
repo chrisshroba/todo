@@ -1,0 +1,19 @@
+{{ #tasks }}
+    <li
+      class='task draggable{{#doneBool}} done-task{{/doneBool}}{{#heading}} heading-task{{/heading}}'
+      data-taskid='{{ id }}'>
+        <div class= 'task-container'>
+            <div class='task-text'>
+                {{ &text }}
+            </div>
+
+            <div class='action-icons'>
+                <span class="glyphicon glyphicon-pencil edit-icon action-icon"></span>
+                {{^heading}}
+                <span class="glyphicon glyphicon-ok done-icon action-icon"></span>
+                {{/heading}}
+                <span class="glyphicon glyphicon-trash trash-icon action-icon"></span>
+            </div>
+        </div>
+    </li>
+{{ /tasks }}
