@@ -49,6 +49,7 @@ function render_tasks(tasks) {
         task.text = prepareTaskText(task.text);
         task.heading = task.heading == 1;
         task.doneBool = task.done_timestamp != null;
+        task.includeTodayIcon = (!task.doneBool) && (!task.heading);
         return task;
     });
     var data = {
@@ -135,11 +136,22 @@ function attach_new_task_listener() {
     });
 }
 
+function DOMElementToTaskId() {
+    var li = $($(this).closest('li')[0]);
+    var taskId = parseInt(li.data('taskid'));
+    return taskId;
+}
 function attach_action_listeners() {
-    $(".edit-icon").click(function (evt) {
+    $(".today-icon").click(function (evt) {
+        var taskId = DOMElementToTaskId.call(this);
+        $.post('/api/task/' + taskId + "/move_to_today", {}, function (response) {
+            fetch_and_render_tasks();
+        });
+    });
 
-        var li = $($(this).closest('li')[0]);
-        var taskId = parseInt(li.data('taskid'));
+    $(".edit-icon").click(function (evt) {
+        var taskId = DOMElementToTaskId.call(this);
+
         // var oldText = li.children('.task-text').html().trim();
         var oldText = taskTexts[taskId];
         var newText = prompt("Enter new text for task", oldText);
@@ -153,14 +165,14 @@ function attach_action_listeners() {
     });
 
     $(".done-icon").click(function (evt) {
-        var taskId = parseInt($($(this).closest('li')[0]).data('taskid'));
+        var taskId = DOMElementToTaskId.call(this);
         $.post('/api/task/' + taskId + "/complete", {}, function (response) {
             fetch_and_render_tasks();
         });
     });
 
     $(".trash-icon").click(function (evt) {
-        var taskId = parseInt($($(this).closest('li')[0]).data('taskid'));
+        var taskId = DOMElementToTaskId.call(this);
         $.ajax({
             url: '/api/task/' + taskId,
             type: 'DELETE',

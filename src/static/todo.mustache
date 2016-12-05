@@ -8,6 +8,9 @@
             </div>
 
             <div class='action-icons'>
+                {{#includeTodayIcon}}
+                    <span class="glyphicon glyphicon-calendar today-icon action-icon"></span>
+                {{/includeTodayIcon}}
                 <span class="glyphicon glyphicon-pencil edit-icon action-icon"></span>
                 {{^heading}}
                 <span class="glyphicon glyphicon-ok done-icon action-icon"></span>

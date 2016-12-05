@@ -15,7 +15,7 @@ def root():
 @app.route('/api/task', methods=['GET', 'POST'])
 def task():
     if request.method == 'GET':
-        return jsonify(get_all_tasks())
+        return jsonify(get_home_tasks())
     elif request.method == 'POST':
         text = request.form.get('text', None)
         header = request.form.get('header', None) or 0
@@ -57,6 +57,11 @@ def move_item():
 @app.route('/api/task/<int:item_id>/complete', methods=['POST'])
 def complete_item(item_id):
     return string_from_success_bool(complete_task(item_id))
+
+
+@app.route('/api/task/<int:item_id>/move_to_today', methods=['POST'])
+def move_to_today(item_id):
+    return string_from_success_bool(move_task_to_today(item_id))
 
 
 def string_from_success_bool(success):

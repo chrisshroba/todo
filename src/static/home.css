@@ -65,7 +65,9 @@ ul {
 
 }
 
-
+/*
+   Action Icons
+*/
 .action-icon {
     cursor: pointer;
 
@@ -78,6 +80,16 @@ ul {
 .edit-icon:hover {
     color: #e7b357;
 }
+
+.today-icon {
+    color: #83acb7;
+}
+
+.today-icon:hover {
+    color: #79cbe8;
+}
+
+
 
 .done-icon {
     color: #7fb794;

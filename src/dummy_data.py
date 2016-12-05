@@ -1,8 +1,5 @@
 import os
 
-DB_PATH = '/Users/christophershroba/Developer/projects/todo/database.sqlite';
-os.remove(DB_PATH)
-
 from src.models import *
 
 tasks = [
@@ -24,7 +21,6 @@ tasks = [
     'Eat that food'
 ]
 
-delete_all_tasks()
 # create_task("Today", heading=1)
 # map(create_task, tasks[:5])
 # create_task("Tomorrow", heading=1)
@@ -33,11 +29,29 @@ delete_all_tasks()
 # for i in range(8):
 #     create_task("Task {}".format(i), order_id=i)
 
-create_task("Today", heading=1)
-create_task("Tomorrow", heading=1)
-create_task("Eventually", heading=1)
+i = 0
 
-with open("/Users/christophershroba/Downloads/todoi", encoding='utf-8') as f:
-    tasks = f.read().split("\n")
-    for task in tasks:
-        create_task(task)
+
+def create_tasks(n):
+    global i
+    for _ in range(n):
+        create_task("Task {}".format(i))
+        i += 1
+
+
+create_task("Done", heading=1)
+create_tasks(4)
+
+create_task("Today", heading=1)
+create_tasks(4)
+
+create_task("Tomorrow", heading=1)
+create_tasks(4)
+
+create_task("Eventually", heading=1)
+create_tasks(4)
+
+# with open("/Users/christophershroba/Downloads/todoi", encoding='utf-8') as f:
+#     tasks = f.read().split("\n")
+#     for task in tasks:
+#         create_task(task)
