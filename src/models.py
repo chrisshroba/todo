@@ -64,13 +64,19 @@ def get_all_tasks():
 
 
 def get_home_tasks():
+    tasks = get_home_tasks_query()
+    tasks_dicts = list(map(model_to_dict, tasks))
+    return tasks_dicts
+
+
+def get_home_tasks_query():
     now = datetime.now()
     today_midnight = datetime(now.year, now.month, now.day)
     tasks = Task.select().where(
         (Task.done_timestamp > today_midnight) | (Task.done_timestamp.is_null())
     ).order_by(Task.order_id)
-    tasks_dicts = list(map(model_to_dict, tasks))
-    return tasks_dicts
+    return tasks
+
 
 
 def get_task(item_id):
@@ -132,10 +138,10 @@ def get_max_order_id():
 
 
 def fix_order():
-    tasks = get_all_tasks()
+    tasks = get_home_tasks()
     for index, task in enumerate(tasks):
         task['order_id'] = index
-    delete_all_tasks()
+    delete_home_tasks()
     create_from_list(tasks, silent=True)
 
 
@@ -152,6 +158,15 @@ def move_before(id_to_move, next_id):
 def delete_all_tasks():
     log('Deleting ALL tasks')
     Task.delete().execute()
+
+
+def delete_home_tasks():
+    log('Deleting ALL tasks')
+    now = datetime.now()
+    today_midnight = datetime(now.year, now.month, now.day)
+    tasks = Task.delete().where(
+        (Task.done_timestamp > today_midnight) | (Task.done_timestamp.is_null())
+    ).execute()
 
 
 def create_from_list(l, silent=False):
