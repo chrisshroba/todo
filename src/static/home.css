@@ -111,3 +111,7 @@ ul {
     margin-top: 15px;
     max-width: 800px;
 }
+
+#new-task-input {
+    width: 100%;
+}

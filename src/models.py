@@ -78,7 +78,6 @@ def get_home_tasks_query():
     return tasks
 
 
-
 def get_task(item_id):
     try:
         return model_to_dict(
@@ -148,11 +147,19 @@ def fix_order():
 def move_before(id_to_move, next_id):
     log("Moving task {} to be before task {}".format(id_to_move, next_id))
     # Double all order_id's
-    Task.update(order_id=Task.order_id * 2).execute()
+    task_id = Task.select().where(Task.order_id == id_to_move).get().id
+
+    now = datetime.now()
+    today_midnight = datetime(now.year, now.month, now.day)
+    Task.update(order_id=Task.order_id * 2).where(
+        (Task.done_timestamp > today_midnight) | (Task.done_timestamp.is_null())
+    ).execute()
+
     task_to_move = Task.select().where(Task.order_id == id_to_move * 2).get()
     task_to_move.order_id = next_id * 2 - 1
     task_to_move.save()
     fix_order()
+    return Task.select().where(Task.id == task_id).get().to_dict()
 
 
 def delete_all_tasks():
@@ -222,7 +229,7 @@ def move_to_end_of_heading(order_id, heading):
         raise Exception("Heading '{}' does not exist".format(heading))
     cat_tasks = get_categorized_tasks()
     num_tasks = len(cat_tasks[heading])
-    move_before(order_id, heading_task.order_id + num_tasks + 1)
+    return move_before(order_id, heading_task.order_id + num_tasks + 1)
 
 
 def move_task_to_today(task_id):

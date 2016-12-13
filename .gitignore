@@ -1,7 +1,1 @@
-.venv
-.idea
-*.pyc
-src/static/lib/
-*.sqlite*
-venv/
-.DS_Store
+sandbox/

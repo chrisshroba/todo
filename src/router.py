@@ -12,8 +12,13 @@ def root():
     return redirect('/static/home.html')
 
 
+@app.route('/favicon.ico')
+def favicon():
+    return redirect('/static/favicon.ico')
+
+
 @app.route('/api/task', methods=['GET', 'POST'])
-def task():
+def task_route():
     if request.method == 'GET':
         return jsonify(get_home_tasks())
     elif request.method == 'POST':
@@ -21,6 +26,15 @@ def task():
         header = request.form.get('header', None) or 0
         task = create_task(text, heading=header)
         return jsonify(task)
+
+
+@app.route('/api/today_task', methods=['POST'])
+def today_task():
+    text = request.form.get('text', None)
+    header = request.form.get('header', None) or 0
+    task = create_task(text, heading=header)
+    updated_task = move_to_end_of_heading(task['order_id'], "Today")
+    return jsonify(updated_task)
 
 
 @app.route('/api/task/<int:item_id>', methods=['GET', 'DELETE'])
@@ -50,7 +64,6 @@ def move_item():
         pass
     else:
         move_before(from_index, to_index + 1)
-
     return 'Success'
 
 

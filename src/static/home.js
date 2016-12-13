@@ -85,6 +85,16 @@ function create_new_task(task_text) {
     })
 }
 
+function create_new_today_task(task_text) {
+    var post_data = {
+        text: task_text
+    };
+    $.post('/api/today_task', post_data, function (response) {
+        fetch_and_render_tasks();
+    })
+}
+
+
 function create_new_header(task_text) {
     var post_data = {
         text: task_text,
@@ -97,7 +107,7 @@ function create_new_header(task_text) {
 }
 
 function scroll_to_bottom() {
-    $("html, body").animate({ scrollTop: $(document).height() }, "fast");
+    $("html, body").animate({scrollTop: $(document).height()}, "fast");
 }
 
 
@@ -125,8 +135,17 @@ function attach_new_task_listener() {
     $("#new-task-input").on('keyup', function (e) {
         if (e.keyCode == 13) {
             var task_text = $(this).val();
+            console.log("Alt:   " + e.altKey);
+            console.log("Ctrl:   " + e.ctrlKey);
+            console.log("Shift:   " + e.shiftKey);
+            console.log("Meta:   " + e.metaKey);
+            console.log("");
+
             if (e.shiftKey) {
-                create_new_header(task_text);
+                create_new_today_task(task_text);
+            }
+            else if (e.altKey) {
+                create_new_header(task_text)
             }
             else {
                 create_new_task(task_text);
