@@ -7,6 +7,11 @@ app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = timedelta(seconds=0)
 
 
+@app.before_request
+def before_request():
+    g.task_controller = TaskController()
+
+
 @app.route('/')
 def root():
     """
@@ -39,11 +44,11 @@ def task_route():
     :return:
     """
     if request.method == 'GET':
-        return jsonify(get_home_tasks())
+        return jsonify(g.task_controller.get_home_tasks())
     elif request.method == 'POST':
         text = request.form.get('text', None)
         header = request.form.get('header', None) or 0
-        task = create_task(text, heading=header)
+        task = g.task_controller.create_task(text, heading=header)
         return jsonify(task)
 
 
@@ -56,8 +61,9 @@ def today_task():
     """
     text = request.form.get('text', None)
     header = request.form.get('header', None) or 0
-    task = create_task(text, heading=header)
-    updated_task = move_to_end_of_heading(task['order_id'], "Today")
+    task = g.task_controller.create_task(text, heading=header)
+    updated_task = g.task_controller.move_to_end_of_heading(task['order_id'],
+                                                            "Today")
     return jsonify(updated_task)
 
 
@@ -71,10 +77,10 @@ def single_item(item_id):
     :param item_id: ID of the task to fetch/delete
     """
     if request.method == 'GET':
-        task = get_task(item_id)
+        task = g.task_controller.get_task(item_id)
         return jsonify(task)
     elif request.method == 'DELETE':
-        return string_from_success_bool(remove_task(item_id))
+        return string_from_success_bool(g.task_controller.remove_task(item_id))
 
 
 @app.route('/api/task/<int:item_id>/update_text', methods=['POST'])
@@ -84,7 +90,7 @@ def update_text(item_id):
     :param item_id: ID of task to update
     """
     text = request.form.get('text', None)
-    task = update_task_text(item_id, text)
+    task = g.task_controller.update_task_text(item_id, text)
     return jsonify(task)
 
 
@@ -103,11 +109,11 @@ def move_item():
     to_index = int(request.form.get('to'))
 
     if to_index < from_index:
-        move_before(from_index, to_index)
+        g.task_controller.move_before(from_index, to_index)
     elif to_index == from_index:
         pass
     else:
-        move_before(from_index, to_index + 1)
+        g.task_controller.move_before(from_index, to_index + 1)
     return 'Success'
 
 
@@ -117,7 +123,7 @@ def complete_item(item_id):
     Mark a task as Done with the current timestamp
     :param item_id: ID of task to mark done
     """
-    return string_from_success_bool(complete_task(item_id))
+    return string_from_success_bool(g.task_controller.complete_task(item_id))
 
 
 @app.route('/api/task/<int:item_id>/move_to_today', methods=['POST'])
@@ -126,7 +132,7 @@ def move_to_today(item_id):
     Move a task to the end of the "Today" Heading
     :param item_id: ID of task to move
     """
-    return string_from_success_bool(move_task_to_today(item_id))
+    return g.task_controller.move_task_to_today(item_id)
 
 
 def string_from_success_bool(success):
