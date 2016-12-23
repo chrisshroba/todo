@@ -146,11 +146,12 @@ def fix_order():
 
 def move_before(id_to_move, next_id):
     log("Moving task {} to be before task {}".format(id_to_move, next_id))
-    # Double all order_id's
     task_id = Task.select().where(Task.order_id == id_to_move).get().id
 
     now = datetime.now()
     today_midnight = datetime(now.year, now.month, now.day)
+
+    # Double all order_id's
     Task.update(order_id=Task.order_id * 2).where(
         (Task.done_timestamp > today_midnight) | (Task.done_timestamp.is_null())
     ).execute()

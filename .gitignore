@@ -1,1 +1,9 @@
 sandbox/
+*.pyc
+__pycache__
+.idea/
+.DS_Store
+*.sqlite*
+db_bu/
+venv/
+src/static/lib/

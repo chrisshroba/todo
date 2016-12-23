@@ -1,10 +1,10 @@
-{{ #tasks }}
+{{#tasks}}
 <li
         class='task draggable{{#doneBool}} done-task{{/doneBool}}{{#heading}} heading-task{{/heading}}'
         data-taskid='{{ id }}'>
     <div class='task-container'>
         <div class='task-text'>
-            {{ &text }}
+            {{&text}}
         </div>
 
         <div class='action-icons'>
@@ -19,4 +19,4 @@
         </div>
     </div>
 </li>
-{{ /tasks }}
+{{/tasks}}
